@@ -118,8 +118,7 @@ await pool.request();
 
 You can configure **MegaPool** with a set of options to control how connections are managed. Here’s an explanation of each option along with a practical example of how to use them.
 
-- **`maxConnection`**: Defines the maximum number of connections that can be created in the pool.
-  - Defaul value is `10`.
+1. **`maxConnection`**: Defines the maximum number of connections that can be created in the pool (default: `10`).
 
 ```js
 // Create a MegaPool instance with a max of 5 connections
@@ -128,8 +127,7 @@ const pool = new MegaPool(driver, { maxConnection: 5 });
 
 > This configuration ensures that no more than 5 connections are created at any given time.
 
-- **`maxIdleTime`**: Sets the lifetime (in milliseconds) for idle connections. If a connection remains idle for longer than this time, it will be closed automatically.
-  - Defaul value is `60000` (1 minute).
+2. **`maxIdleTime`**: Sets the lifetime (in milliseconds) for idle connections. If a connection remains idle for longer than this time, it will be closed automatically (default: `60000`).
 
 ```js
 // Create a MegaPool instance where idle connections will be closed after 2 minutes
@@ -138,8 +136,7 @@ const pool = new MegaPool(driver, { maxIdleTime: 120000 });
 
 > This means that if a connection is idle for 2 minutes, it will be closed to free up resources.
 
-- **`shouldQueue`**: Determines whether connection requests should be queued when there are no idle connections available. If set to `true`, the request will be placed in a queue until an idle connection is available.
-  - Default value is `true`.
+3. **`shouldQueue`**: Determines whether connection requests should be queued when there are no idle connections available. If set to `true`, the request will be placed in a queue until an idle connection is available (default: `true`).
 
 ```js
 // Create a MegaPool instance with request queuing disabled
@@ -148,8 +145,7 @@ const pool = new MegaPool(driver, { shouldQueue: false });
 
 > With `shouldQueue: false`, if there are no idle connections, the request will fail immediately.
 
-- **`maxQueueSize`**: Limits the number of connection requests that can be queued when there are no idle connections available.
-  - Default value is `Infinity`.
+4. **`maxQueueSize`**: Limits the number of connection requests that can be queued when there are no idle connections available (default: `Infinity`).
 
 ```js
 // Create a MegaPool instance with a queue size limit of 5
@@ -158,8 +154,7 @@ const pool = new MegaPool(driver, { maxQueueSize: 5 });
 
 > This limits the queue to 5 requests. If there are more than 5 requests while the pool is exhausted, the extra requests will be rejected.
 
-- **`maxQueueTime`**: Sets the maximum amount of time (in milliseconds) a request can remain in the queue before it is rejected.
-  - Default value is `1000` (1 second).
+5. **`maxQueueTime`**: Sets the maximum amount of time (in milliseconds) a request can remain in the queue before it is rejected (default: `1000`).
 
 ```js
 // Create a MegaPool instance where queued requests will be rejected after 2 seconds
@@ -168,8 +163,7 @@ const pool = new MegaPool(driver, { maxQueueTime: 2000 });
 
 > With this setting, any request that has been in the queue for longer than 2 seconds will be rejected.
 
-- **`shouldRetry`**: Determines whether failed connection creation or closure attempts should be retried.
-  - Default value is `true`.
+6. **`shouldRetry`**: Determines whether failed connection creation or closure attempts should be retried (default: `true`).
 
 ```js
 // Create a MegaPool instance that disables retrying on connection failure
@@ -178,8 +172,7 @@ const pool = new MegaPool(driver, { shouldRetry: false });
 
 > Setting this to `false` means that if a connection creation or closure fails, it will not be retried.
 
-- **`maxRetry`**: Specifies the maximum number of retry attempts to make when connection creation or closure fails.
-  - Default value is `3`.
+7. **`maxRetry`**: Specifies the maximum number of retry attempts to make when connection creation or closure fails (default: `3`).
 
 ```js
 // Create a MegaPool instance that will retry up to 5 times on failure
@@ -188,8 +181,7 @@ const pool = new MegaPool(driver, { maxRetry: 5 });
 
 > This ensures that if connection creation fails, the system will try up to 5 times before giving up.
 
-- **`retryDelay`**: Defines the delay (in milliseconds) between retry attempts when a failure occurs.
-  - Default value is `500` (500 ms).
+8. **`retryDelay`**: Defines the delay (in milliseconds) between retry attempts when a failure occurs (default: `500`).
 
 ```js
 // Create a MegaPool instance that waits 1 second between retries
@@ -198,8 +190,7 @@ const pool = new MegaPool(driver, { retryDelay: 1000 });
 
 > This sets a 1-second delay between retry attempts when a failure happens.
 
-- **`extraDelay`**: Adds extra time (in milliseconds) between retry attempts. This increases the delay incrementally with each retry.
-  - Default value is `500` (500 ms).
+9. **`extraDelay`**: Adds extra time (in milliseconds) between retry attempts. This increases the delay incrementally with each retry (default: `500`).
 
 ```js
 // Create a MegaPool instance with additional delay between retries
@@ -212,15 +203,32 @@ Here’s how you can configure a **MegaPool** with all the options set:
 
 ```js
 const pool = new MegaPool(driver, {
-  maxConnection: 15, // Max number of connections in the pool
-  maxIdleTime: 180000, // Idle connections will be closed after 3 minutes
-  shouldQueue: true, // Queue requests when no idle connections are available (15 acquired)
-  maxQueueSize: 10, // Max 10 requests can be queued
-  maxQueueTime: 3000, // Requests will be rejected if they stay in the queue for more than 3 seconds
-  shouldRetry: true, // Retry failed connection creation/closure
-  maxRetry: 5, // Retry up to 5 times on failure
-  retryDelay: 1000, // Wait 1 second between retries
-  extraDelay: 500, // Add an additional 500ms delay after each retry
+  // Max number of connections in the pool
+  maxConnection: 15,
+
+  // Idle connections will be closed after 3 minutes
+  maxIdleTime: 180000,
+
+  // Queue requests when no idle connections are available
+  shouldQueue: true,
+
+  // Max 10 requests can be queued
+  maxQueueSize: 10,
+
+  // Reject requests if they stay in the queue for more than 3 seconds
+  maxQueueTime: 3000,
+
+  // Retry failed connection creation/closure
+  shouldRetry: true,
+
+  // Retry up to 5 times on failure
+  maxRetry: 5,
+
+  // Wait 1 second between retries
+  retryDelay: 1000,
+
+  // Add an additional 500ms delay after each retry
+  extraDelay: 500,
 });
 ```
 
